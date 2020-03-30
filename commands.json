@@ -1,0 +1,44 @@
+{
+  "notify": {
+    "desc": "Send a notification to all subscribers.",
+    "usage": "Command must be a reply to some message.",
+    "level": "USER"
+  },
+  "rate": {
+    "desc": "Give YOUR rating to a movie you watched. Command must be a reply to some message.",
+    "usage": "`!rate NUMBER_BET_1_10 [Command must be a reply to some message.]`",
+    "level": "USER"
+  },
+  "add": {
+    "desc": "Add a movie to the database, requires GOD privilige.",
+    "usage": "Must be a message in proper format, so that title and other details can be extracted",
+    "level": "GOD"
+  },
+  "help": {
+    "desc": "This very message, you idiot!",
+    "level": "USER"
+  },
+  "sub": {
+    "desc": "Make yourself a subscriber.",
+    "level": "USER"
+  },
+  "start": {
+    "desc": "You will recieve notifications from me",
+    "usage": "You need to be a subscriber furst.",
+    "level": "USER"
+  },
+  "stop": {
+    "desc": "You will NOT recieve notifications from me",
+    "usage": "You need to be a subscriber furst.",
+    "level": "USER"
+  },
+  "suggest": {
+    "desc": "I'm bored, suggest me a movie.",
+    "level": "USER"
+  },
+  "promote": {
+    "desc": "promote USERs to GODs.",
+    "usage": "!promote @username",
+    "level": "GOD"
+  }
+}
