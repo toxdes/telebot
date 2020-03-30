@@ -15,7 +15,8 @@
     "start": "node index.js",
     "dev": "nodemon --exec node --inspect index.js",
     "git": "git push origin master",
-    "push": "git push heroku master && git push origin master",
-    "deploy": "heroku scale web=0 worker=1"
+    "push": "git push heroku master && yarn git",
+    "enable": "heroku scale web=0 worker=1",
+    "disable": "heroku scale web=0 worker=0"
   }
 }
