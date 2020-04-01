@@ -5,49 +5,59 @@
     "god_string": "I assure you, he CANNOT get better than this.\n\nHe is already a GOD.🤩🤩",
     "nobody_string": "The harsh truth of this twisted reality is,\n\nhe is a NOBODY.😢",
     "usage": "If used as a reply to someone's message, you get to know who they are.\nElse, I will tell you what society really thinks of you.\n\n<code> !whoami </code> That's it.😊",
-    "level": "NOBODY"
+    "level": "NOBODY",
+    "status": "Implemented"
   },
   "notify": {
     "desc": "Send a notification to all subscribers.",
     "usage": "Command must be a reply to some message.",
-    "level": "USER"
+    "level": "USER",
+    "status": "Implemented"
   },
   "rate": {
     "desc": "Give YOUR rating to a movie you watched.",
     "usage": " Command must be a reply to some message.\nRating must be on a scale of (0,10].\n<code>!rate your_rating </code>",
-    "level": "USER"
+    "level": "USER",
+    "status": "Not Implemented"
   },
   "add": {
     "desc": "Add a movie to the database",
     "usage": "Requires GOD privilige. Refernced message must be in proper format, so that title and other details can be extracted",
-    "level": "GOD"
+    "level": "GOD",
+    "status": "Not Implemented"
   },
   "help": {
     "desc": "This very message, you idiot!",
-    "level": "NOBODY"
+    "level": "NOBODY",
+    "status": "Implemented"
   },
   "sub": {
     "desc": "Make yourself a subscriber.",
     "success_message": "😱😱😱\nYou might have just made one the biggest decisions of your life.\nWelcome to the cult.🥳🥳\n<b>AND</b>\nThanks for not being mean to me.❤️❤️❤️",
-    "level": "NOBODY"
+    "level": "NOBODY",
+    "status": "Implemented"
   },
   "start": {
     "desc": "You will recieve notifications from me",
     "usage": "You need to be a subscriber furst.",
-    "level": "USER"
+    "level": "USER",
+    "status": "Implemented"
   },
   "stop": {
     "desc": "You will NOT recieve notifications from me",
     "usage": "You need to be a subscriber furst.",
-    "level": "USER"
+    "level": "USER",
+    "status": "Implemented"
   },
   "suggest": {
     "desc": "Suggest a movie to add to our epic collection.",
-    "level": "NOBODY"
+    "level": "NOBODY",
+    "status": "Not Implemented"
   },
   "promote": {
     "desc": "promote USERs to GODs.",
     "usage": "Command must be a reply to someone's message.\n\nUsage: <code>!promote</code>",
-    "level": "USER"
+    "level": "USER",
+    "status": "Implemented"
   }
 }

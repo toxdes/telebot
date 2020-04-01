@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "node index.js",
+    "gen-commands": "node gen_commands.js > temp.md",
     "dev": "nodemon --exec node --inspect index.js",
     "git": "git push origin master",
     "push": "git push heroku master && yarn git",
