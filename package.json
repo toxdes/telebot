@@ -12,9 +12,9 @@
     "telegraf": "^3.36.0"
   },
   "scripts": {
-    "start": "node index.js",
-    "gen-commands": "node gen_commands.js > temp.md && sed -ni \"/# Commands/q;p\" README.md && cat README.md temp.md > wow.md && mv wow.md README.md",
-    "dev": "nodemon --exec node --inspect index.js",
+    "start": "node src/index.js",
+    "gen-commands": "node src/gen_commands.js > temp.md && sed -ni \"/# Commands/q;p\" README.md && cat README.md temp.md > wow.md && mv wow.md README.md",
+    "dev": "nodemon --exec node --inspect src/index.js",
     "git": "git push origin master",
     "push": "git push heroku master && yarn git",
     "enable": "heroku scale web=0 worker=1",
