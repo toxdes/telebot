@@ -200,11 +200,14 @@ const handle_command = (client, c, ctx) => {
           // console.log(get_username(ctx.message));
           // console.log(ctx.message.from.id);
           let { has, username } = get_username(ctx.message);
+          // user needs to click on start button, otherwise the bot can't initiate a conversation with a user.
 
           await client.query(q.subscribe, [ctx.message.from.id, username]);
-          return `${commands.sub.success_message}.\n${
-            !has ? "Bruh. Why don't you have a username yet?" : ""
-          }`;
+          return `Tap Here -> ${
+            ctx.BOT_USERNAME
+          }, then tap on start button, otherwise I won't be able to talk to you.\n\n\n${
+            commands.sub.success_message
+          }.\n\n\n${!has ? "Bruh. Why don't you have a username yet?" : ""}`;
         } catch (e) {
           return err_message;
         }

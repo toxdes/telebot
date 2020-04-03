@@ -12,7 +12,7 @@ const client = new Client({
 });
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-
+bot.context.BOT_USERNAME = process.env.BOT_USERNAME;
 client.connect();
 client.query(q.drop_tables, (err, res) => {
   if (err) console.error(err);
