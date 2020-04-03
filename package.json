@@ -1,6 +1,6 @@
 {
   "name": "telebot",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A bot for personal use :)",
   "main": "index.js",
   "repository": "github.com/toxdes/telebot",
