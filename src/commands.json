@@ -10,7 +10,7 @@
   },
   "notify": {
     "desc": "Send a notification to all subscribers.",
-    "usage": "Command must be a reply to some message.",
+    "usage": "Command must be a reply to some message. You need to be at least a USER.\n\nHow about some <code>!sub</code>...?\n\n😁😁",
     "level": "USER",
     "status": "Implemented"
   },
@@ -51,7 +51,9 @@
   },
   "suggest": {
     "desc": "Suggest a movie to add to our epic collection.",
+    "usage": "Must be a reply to some message.",
     "level": "NOBODY",
+    "err_message": "I usually know what I have to do, but unfortunately, at this moment, I don't know what to do man.\n\nLife is tough.\nI'm sorry.",
     "status": "Not Implemented"
   },
   "promote": {

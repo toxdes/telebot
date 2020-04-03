@@ -1,7 +1,5 @@
 require("dotenv").config();
 const Telegraf = require("telegraf");
-const Extra = require("telegraf/extra");
-const Markup = require("telegraf/markup");
 
 const { Client } = require("pg");
 const { is_command, handle_command, get_message_id } = require("./helpers");
@@ -51,6 +49,8 @@ bot.on("text", async ctx => {
   if (message_id != -1) {
     console.log(`message_id: ${message_id}`);
     options["reply_to_message_id"] = message_id;
+  } else {
+    options["reply_to_message_id"] = ctx.message.message_id;
   }
 
   if (is_command(message_text)) {
@@ -58,8 +58,10 @@ bot.on("text", async ctx => {
   }
   console.log(ctx);
   //const chat_id = ctx.message.chat.id;
-
-  ctx.replyWithHTML(res, message_id != -1 ? options : undefined);
+  if (!res) {
+    return;
+  }
+  ctx.replyWithHTML(res, options);
   //   ctx.replyWithPoll(
   //     "How much would you rate this?",
   //     [

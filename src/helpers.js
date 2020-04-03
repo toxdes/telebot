@@ -40,6 +40,20 @@ const is_subbed = async (client, user_id) => {
   return res.rowCount == 1;
 };
 
+const get_username = message_context => {
+  let username = message_context.from.username;
+  let is_it = true;
+  if (!username) {
+    // because some imbeciles don't have usernames, wtf
+    username = message_context.from.first_name;
+    is_it = false;
+  }
+  return { has: is_it, username };
+};
+
+const mention_user = user_id => {
+  return `tg://user?id=${user_id}`;
+};
 const handle_command = (client, c, ctx) => {
   c = c.substr(1, c.length);
   switch (c) {
@@ -55,11 +69,20 @@ const handle_command = (client, c, ctx) => {
       };
     case "notify":
       return async () => {
-        let res = await client.query(q.get_notified_usernames);
-        let temp = "";
+        let who = await get_privilige(client, ctx.message.from.id);
+        if (!is_able(who, commands.notify.level)) {
+          return commands.notify.usage;
+        }
+        res = await client.query(q.get_notified_users);
+        let temp = `Yo. ${
+          get_username(ctx.message).username
+        } wants y'all to take a look at something.\n\n\n`;
         res.rows.map(each => {
-          temp = `${temp}\n@${each.username}`;
+          temp = `${temp}\n<a href="${mention_user(each.id)}">${
+            each.username
+          }</a>`;
         });
+        temp = `${temp}\n\n\n<i>You were mentioned here because you wanted so.</i>`;
         return temp;
       };
     case "rate":
@@ -130,11 +153,14 @@ const handle_command = (client, c, ctx) => {
         // const err_message =
         // "I don't know you. Maybe something bad has happened.\n\nI am the one who gets to say sorry here.😢";
         let user_id = ctx.message.from.id;
-        let username = ctx.message.from.username;
+        let { has, username } = get_username(ctx.message);
         if (message_id != -1) {
           // wants to know someone elses.
           user_id = ctx.message.reply_to_message.from.id;
-          username = ctx.message.reply_to_message.from.username;
+          username = get_username(ctx.message.reply_to_message);
+          has = username.has;
+          // oh dear god pls forgive me for this.
+          username = username.username;
         }
         let who = await get_privilige(client, user_id);
         let res = await client.query(q.select_subs);
@@ -142,25 +168,43 @@ const handle_command = (client, c, ctx) => {
         // console.log(res);
         switch (who) {
           case "USER":
-            return `You wanted to know about <i>${username}</i>? 😳\n\n${commands.who.user_string}`;
+            return `You wanted to know about <i>${username}</i>? 😳\n\n${
+              commands.who.user_string
+            }.\n${
+              !has
+                ? "\n<i>The sad part is, he doesn't have a username.</i>"
+                : ""
+            }`;
           case "GOD":
-            return `You wanted to know about <i>${username}</i>? 😳\n\n${commands.who.god_string}`;
+            return `You wanted to know about <i>${username}</i>? 😳\n\n${
+              commands.who.god_string
+            }.\n${
+              !has
+                ? "\n<i>The sad part is, he doesn't have a username.</i>"
+                : ""
+            }`;
           default:
-            return `You wanted to know about <i>${username}</i>? 😳\n\n${commands.who.nobody_string}`;
+            return `You wanted to know about <i>${username}</i>? 😳\n\n${
+              commands.who.nobody_string
+            }.\n${
+              !has
+                ? "\n<i>The sad part is, he doesn't have a username.</i>"
+                : ""
+            }`;
         }
       };
     case "sub":
       return async () => {
         const err_message = `Hello, fellow Homo Sapien.\nPlease try to live up with the standard.\nYou are already subscribed.😂😂`;
         try {
-          // console.log(ctx.message.from.username);
+          // console.log(get_username(ctx.message));
           // console.log(ctx.message.from.id);
+          let { has, username } = get_username(ctx.message);
 
-          let res = await client.query(q.subscribe, [
-            ctx.message.from.id,
-            ctx.message.from.username
-          ]);
-          return commands.sub.success_message;
+          await client.query(q.subscribe, [ctx.message.from.id, username]);
+          return `${commands.sub.success_message}.\n${
+            !has ? "Bruh. Why don't you have a username yet?" : ""
+          }`;
         } catch (e) {
           return err_message;
         }
@@ -172,8 +216,10 @@ const handle_command = (client, c, ctx) => {
         let message_id = get_message_id(ctx);
         if (message_id != -1) {
           let who_to_promote_id = ctx.message.reply_to_message.from.id;
-          let who_to_promote_username =
-            ctx.message.reply_to_message.from.username;
+          let who_to_promote_username = get_username(
+            ctx.message.reply_to_message
+          ).username;
+
           let who_is_promoting_id = ctx.message.from.id;
           let promoter_privilige = await get_privilige(
             client,
@@ -190,12 +236,57 @@ const handle_command = (client, c, ctx) => {
           }
           if (is_able(promoter_privilige, commands.promote.level)) {
             await client.query(q.update_privilige, [who_to_promote_id, "GOD"]);
-            return `Done!😊\n\n@${who_to_promote_username} is a GOD now.🥳🥳\n\nI hope he knows that with great power, comes great responsibility.`;
+            return `Done!😊\n\n<i>${who_to_promote_username}</i> is a GOD now.🥳🥳\n\nI hope he knows that with great power, comes great responsibility.`;
           }
         } else {
           return `Who do you want to promote?\n\nObviously you cannot promote yourself.😅😅\n\n${commands.promote.usage}`;
         }
         return err_message;
+      };
+    case "suggest":
+      return async () => {
+        // send DMs to GODs(only those who have notifications enabled.)
+        let gods = await client.query(q.get_active_gods, ["GOD"]);
+        let message_id = get_message_id(ctx);
+        if (message_id == -1) {
+          return `Hello there fellow pleb, you don't know how to use this command.\n\n<i>${commands.suggest.usage}</i>`;
+        }
+        if (gods.rowCount > 0) {
+          gods = gods.rows;
+        } else {
+          return commands.suggest.err_message;
+        }
+        let who_is_suggesting_username = get_username(ctx.message).username;
+        let forward_from_chat_id = ctx.message.chat.id;
+        let message_forward_id = ctx.message.message_id;
+        let group_id = `${-1 * forward_from_chat_id}`;
+        group_id = group_id.substring(3, group_id.length);
+
+        gods.map(async each => {
+          let user_id = each.id;
+          try {
+            await ctx.telegram.sendMessage(
+              user_id,
+              `<i>${who_is_suggesting_username}</i> is suggesting something to add to our epic collection.
+              \n\n <a href="https://t.me/c/${group_id}/${message_forward_id}">Check out here.</a>
+            \n\n<i>You are recieving this because you are a GOD.</i>`,
+              { parse_mode: "HTML" }
+            );
+            // await ctx.telegram.forwardMessage(
+            //   user_id,
+            //   forward_from_chat_id,
+            //   message_forward_id
+            // );
+          } catch (e) {
+            console.log(
+              "Cannot send a message to the user, because bots cannot initiate a conversation with a user"
+            );
+            console.log(
+              `This guy probably doesn't want to talk to me: ${each.username}`
+            );
+          }
+        });
+        return "Oh, you want to add a movie?\n\nCool. I took care of it. Some GOD will be on it soon.\n\nThank you. ☺️☺️";
       };
     default:
       return async () => "Not implemented yet. 😊";
