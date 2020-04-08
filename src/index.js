@@ -2,7 +2,7 @@ require("dotenv").config();
 const Telegraf = require("telegraf");
 
 const { Client } = require("pg");
-const { is_command, handle_command, get_message_id } = require("./helpers");
+const { is_command, handle_command, get_chat_id } = require("./helpers");
 
 const { q } = require("./queries");
 
@@ -29,14 +29,6 @@ client.query(q.insert_dummy, (err, res) => {
   if (res) console.log(res.rows);
 });
 
-// client.query(q.select_subs, (err, res) => {
-//   if (err) {
-//     console.error(err);
-//     return;
-//   }
-//   console.log(res ? res.rows : undefined);
-// });
-
 console.log("bot started!");
 
 bot.on("text", async ctx => {
@@ -45,33 +37,47 @@ bot.on("text", async ctx => {
 
   console.log(`recieved: ${message_text}`);
   let options = {};
-  const message_id = get_message_id(ctx);
-  if (message_id != -1) {
-    console.log(`message_id: ${message_id}`);
-    options["reply_to_message_id"] = message_id;
-  } else {
-    options["reply_to_message_id"] = ctx.message.message_id;
-  }
-
+  // if (message_id != -1) {
+  //   console.log(`message_id: ${message_id}`);
+  //   options["reply_to_message_id"] = message_id;
+  // } else {
+  //   options["reply_to_message_id"] = ctx.message.message_id;
+  // }
+  let should_keep = false;
+  let keep = {
+    sender_id: ctx.message.from.id,
+    message_id: ctx.message.message_id,
+    bot_id: process.env.BOT_USERID,
+    reply_id: undefined,
+    chat_id: ctx.chat.id
+  };
+  options["reply_to_message_id"] = ctx.message.message_id;
   if (is_command(message_text)) {
+    should_keep = true;
     res = await handle_command(client, message_text, ctx)();
+  } else {
+    // don't reply anythin, the user wasn't talking to the bot
+    return;
   }
   console.log(ctx);
-  //const chat_id = ctx.message.chat.id;
   if (!res) {
     return;
   }
-  ctx.replyWithHTML(res, options);
-  //   ctx.replyWithPoll(
-  //     "How much would you rate this?",
-  //     [
-  //       " Extremely Bad 😡 ",
-  //       " I enjoyed 😢 ",
-  //       " Damn, underrated one! 🥰 ",
-  //       " One of the best for me! 😍 "
-  //     ],
-  //     options
-  //   );
+  let message = await ctx.replyWithHTML(res, options);
+  if (!message) {
+    console.log("maybe bot failed to send the message.");
+    return;
+  }
+  keep.reply_id = message.message_id;
+  if (should_keep) {
+    await client.query(q.insert_into_delete_queue, [
+      keep.message_id,
+      keep.bot_id,
+      keep.reply_id,
+      get_chat_id(keep.chat_id)
+    ]);
+  }
+  console.log(message);
 });
 
 bot.launch();

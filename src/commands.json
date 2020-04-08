@@ -54,12 +54,17 @@
     "usage": "Must be a reply to some message.",
     "level": "NOBODY",
     "err_message": "I usually know what I have to do, but unfortunately, at this moment, I don't know what to do man.\n\nLife is tough.\nI'm sorry.",
-    "status": "Not Implemented"
+    "status": "Implemented"
   },
   "promote": {
     "desc": "promote USERs to GODs.",
     "usage": "Command must be a reply to someone's message.\n\nUsage: <code>!promote</code>",
     "level": "USER",
+    "status": "Implemented"
+  },
+  "delete": {
+    "desc": "Delete bot and user command messages that were older than the limit decided by my creator.",
+    "level": "GOD",
     "status": "Implemented"
   }
 }

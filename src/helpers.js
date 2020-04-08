@@ -54,6 +54,30 @@ const get_username = message_context => {
 const mention_user = user_id => {
   return `tg://user?id=${user_id}`;
 };
+
+const get_chat_id = id => {
+  //strip -100 from the id, cause it's a supergroup
+  // also overflows for integer type so
+  //idc about non-supergroups?
+  let group_id = `${-1 * id}`;
+  group_id = group_id.substring(3, group_id.length);
+  return group_id;
+};
+
+const delete_messages = async (client, ctx) => {
+  let res = await client.query(q.get_messages_to_delete);
+  if (res.rowCount < 1) {
+    return;
+  }
+
+  res.rows.forEach(async row => {
+    // add -100, cause supergroup
+    let chat_id = Number(`-100${row.chat_id}`);
+    await ctx.telegram.deleteMessage(chat_id, row.message_id);
+    await ctx.telegram.deleteMessage(chat_id, row.reply_id);
+    await client.query(q.update_delete_queue, [each.id]);
+  });
+};
 const handle_command = (client, c, ctx) => {
   c = c.substr(1, c.length);
   switch (c) {
@@ -74,15 +98,32 @@ const handle_command = (client, c, ctx) => {
           return commands.notify.usage;
         }
         res = await client.query(q.get_notified_users);
-        let temp = `Yo. ${
-          get_username(ctx.message).username
-        } wants y'all to take a look at something.\n\n\n`;
-        res.rows.map(each => {
-          temp = `${temp}\n<a href="${mention_user(each.id)}">${
-            each.username
-          }</a>`;
+        const { has, username } = get_username(ctx.message);
+        let group_id = get_chat_id(ctx.message.chat.id);
+        let temp = "Cool. I'm doing what I can.";
+        res.rows.map(async each => {
+          try {
+            if (each.id == ctx.message.from.id) {
+              return;
+            }
+            await ctx.telegram.sendMessage(
+              each.id,
+              `Yo.\n<i>${username}</i> wants to tell y'all something.
+              \n\n <a href="https://t.me/c/${group_id}/${
+                ctx.message.message_id
+              }">Take a look.</a>
+            \n\n<i>You are recieving this because you asked me to do so.</i>\n${
+              !has ? "Also, why don't you have a username yet?" : ""
+            }`,
+              { parse_mode: "HTML" }
+            );
+          } catch (e) {
+            console.log(
+              `This guy probably doesn't want to talk to me: ${each.username}`
+            );
+            temp = `${temp}\nThis guy probably doesn't want to talk to me: ${each.username}`;
+          }
         });
-        temp = `${temp}\n\n\n<i>You were mentioned here because you wanted so.</i>`;
         return temp;
       };
     case "rate":
@@ -163,9 +204,6 @@ const handle_command = (client, c, ctx) => {
           username = username.username;
         }
         let who = await get_privilige(client, user_id);
-        let res = await client.query(q.select_subs);
-        console.log("sub", res);
-        // console.log(res);
         switch (who) {
           case "USER":
             return `You wanted to know about <i>${username}</i>? 😳\n\n${
@@ -262,9 +300,7 @@ const handle_command = (client, c, ctx) => {
         let who_is_suggesting_username = get_username(ctx.message).username;
         let forward_from_chat_id = ctx.message.chat.id;
         let message_forward_id = ctx.message.message_id;
-        let group_id = `${-1 * forward_from_chat_id}`;
-        group_id = group_id.substring(3, group_id.length);
-
+        let group_id = get_chat_id(forward_from_chat_id);
         gods.map(async each => {
           let user_id = each.id;
           try {
@@ -291,6 +327,12 @@ const handle_command = (client, c, ctx) => {
         });
         return "Oh, you want to add a movie?\n\nCool. I took care of it. Some GOD will be on it soon.\n\nThank you. ☺️☺️";
       };
+    case "delete":
+      return async () => {
+        // testing delete queue
+        await delete_messages(client, ctx);
+        return "Deleted unimportant messages that were older than 1 day.";
+      };
     default:
       return async () => "Not implemented yet. 😊";
   }
@@ -299,3 +341,4 @@ const handle_command = (client, c, ctx) => {
 exports.is_command = is_command;
 exports.handle_command = handle_command;
 exports.get_message_id = get_message_id;
+exports.get_chat_id = get_chat_id;

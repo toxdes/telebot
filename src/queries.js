@@ -1,5 +1,5 @@
 exports.q = {
-  drop_tables: `DROP TABLE rating; DROP TABLE movies; DROP TABLE subscribers;`,
+  drop_tables: `DROP TABLE IF EXISTS rating; DROP TABLE IF EXISTS movies; DROP TABLE IF EXISTS subscribers;`,
   create_tables: `
     CREATE TABLE IF NOT EXISTS subscribers(
         id INTEGER PRIMARY KEY,
@@ -25,6 +25,16 @@ exports.q = {
         CONSTRAINT unique_user_movie UNIQUE (user_id, movie_id)
     );
 
+    CREATE TABLE IF NOT EXISTS delete_queue(
+      id SERIAL PRIMARY KEY,
+      chat_id INTEGER NOT NULL,
+      message_id INTEGER NOT NULL,
+      reply_id INTEGER NOT NULL, 
+      bot_id INTEGER NOT NULL,
+      created_at DATE,
+      deleted BOOLEAN DEFAULT FALSE 
+    );
+
     `,
   insert_dummy: `
         INSERT INTO subscribers(id, username) VALUES(938977975, 'cool_bro');
@@ -46,5 +56,11 @@ exports.q = {
   is_subbed: `SELECT * FROM subscribers WHERE id=$1;`,
   start_notifications: `UPDATE subscribers SET notifications=TRUE WHERE id=$1;`,
   stop_notifications: `UPDATE subscribers SET notifications=FALSE WHERE id=$1;`,
-  get_active_gods: `SELECT * FROM subscribers where roll=$1 AND notifications=TRUE`
+  get_active_gods: `SELECT * FROM subscribers where roll=$1 AND notifications=TRUE;`,
+  insert_into_delete_queue: `INSERT INTO delete_queue 
+  (message_id, bot_id, reply_id, chat_id, created_at)
+  VALUES ($1,$2,$3,$4,current_date);`,
+  get_messages_to_delete: `select * from delete_queue where AGE(created_at) > interval '1 day';`,
+  select_delete_queue: `select * from delete_queue;`,
+  update_delete_queue: `delete * from delete_queue where id=$1`
 };
