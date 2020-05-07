@@ -8,30 +8,17 @@ const { q } = require("./queries");
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
-  ssl: true
+  ssl: { rejectUnauthorized: false }
 });
+
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.context.BOT_USERNAME = process.env.BOT_USERNAME;
-client.connect().then((err, res) => {
-  if (err) throw err;
-  if (res) console.log("connected", res);
-
-  client.query(q.drop_tables, (err, res) => {
-    if (err) console.error(err);
-    if (res) console.log(res.rows);
-  });
-
-  client.query(q.create_tables, (err, res) => {
-    if (err) console.error(err);
-    if (res) console.log(res.rows);
-  });
-
-  client.query(q.insert_dummy, (err, res) => {
-    if (err) console.error(err);
-    if (res) console.log(res.rows);
-  });
-
+client.connect(err => {
+  if (err) {
+    console.log("Couldn't connect to database.");
+    console.error(err);
+  }
 });
 
 console.log("bot started!");
@@ -39,6 +26,9 @@ console.log("bot started!");
 bot.on("text", async ctx => {
   const message_text = ctx.message.text;
   let res = "what? I don't know what you're talking about 😢";
+  // await client.query(q.drop_tables);
+  await client.query(q.create_tables);
+  // await client.query(q.insert_dummy);
 
   console.log(`recieved: ${message_text}`);
   let options = {};
@@ -59,7 +49,12 @@ bot.on("text", async ctx => {
   options["reply_to_message_id"] = ctx.message.message_id;
   if (is_command(message_text)) {
     should_keep = true;
-    res = await handle_command(client, message_text, ctx)();
+    try {
+      res = await handle_command(client, message_text, ctx)();
+    } catch (e) {
+      console.log(e);
+      res = "You are crashing the server. Please stop.";
+    }
   } else {
     // don't reply anythin, the user wasn't talking to the bot
     return;

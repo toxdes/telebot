@@ -59,7 +59,7 @@
   "promote": {
     "desc": "promote USERs to GODs.",
     "usage": "Command must be a reply to someone's message.\n\nUsage: <code>!promote</code>",
-    "level": "USER",
+    "level": "GOD",
     "status": "Implemented"
   },
   "delete": {
@@ -82,6 +82,12 @@
   "updatecmd": {
     "desc": "Update an existing user defined command.",
     "usage": "Requires GOD privilige. Usage: <code>!updatecmd [command] [new_command_text]</code>",
+    "level": "GOD",
+    "status": "Not Implemented"
+  },
+  "deletecmd": {
+    "desc": "Delete an existing user defined command.",
+    "usage": "Requires GOD privilige. Usage: <code>!deletecmd [command]</code>",
     "level": "GOD",
     "status": "Not Implemented"
   }

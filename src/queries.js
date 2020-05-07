@@ -38,7 +38,7 @@ exports.q = {
     CREATE TABLE IF NOT EXISTS commands(
       id SERIAL PRIMARY KEY,
       command VARCHAR(240) NOT NULL,
-      text VARCHAR(1024) NOT NULL,
+      text VARCHAR(1024) NOT NULL
     );
     `,
   insert_dummy: `
@@ -68,9 +68,9 @@ exports.q = {
   get_messages_to_delete: `select * from delete_queue where AGE(created_at) > interval '1 day';`,
   select_delete_queue: `select * from delete_queue;`,
   update_delete_queue: `delete * from delete_queue where id=$1`,
-  get_user_commands: `select * FROM commands;`,
+  get_user_commands: `select * from commands;`,
   get_command: `select * FROM commands where command=$1;`,
   add_alias: `INSERT INTO commands(command, text) VALUES ($1, (select text from commands where command=$2));`,
   add_cmd: `INSERT INTO commands(command, text) VALUES ($1,$2)`,
-  update_cmd: `UPDATE commands SET text=$2 where command=$1`
+  update_command: `UPDATE commands SET text=$2 where command=$1`
 };

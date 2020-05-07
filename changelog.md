@@ -1,7 +1,12 @@
 # Changelog
 
 Changelog for the development
-
+### v 0.3.0
+- Added functionality for user to add commands. So, the commands are now classified in two categories, one is core commands, and other is user commands. 
+- To manage user commands, `!addcmd`, `!alias`, `!updatecmd` and `!deletecmd` are added. 
+- `!deletecmd` is not yet implemented. Also a lot of testing is remaining. 
+- Upgraded `pg` dependancy to latest version, so this setup works with `node 14`
+  
 ### v0.2.1
 
 - Updated version for `package.json`, minor fixes.
