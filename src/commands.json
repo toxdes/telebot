@@ -66,5 +66,23 @@
     "desc": "Delete bot and user command messages that were older than the limit decided by my creator.",
     "level": "GOD",
     "status": "Implemented"
+  },
+  "addcmd": {
+    "desc": "Create A new Command.",
+    "usage": "Requires GOD privilige.\n\nUsage: <code>!addcmd [command] [%s to get remaining message after the command is called] [your_text]</code>",
+    "level": "GOD",
+    "status": "Implemented"
+  },
+  "alias": {
+    "desc": "Add an alias to a command, to make it shorter/convinient?",
+    "usage": "Requires GOD privilige.\n\nUsage: <code>!alias [new-name] [old-command-name]</code>",
+    "level": "GOD",
+    "status": "Implemented"
+  },
+  "updatecmd": {
+    "desc": "Update an existing user defined command.",
+    "usage": "Requires GOD privilige. Usage: <code>!updatecmd [command] [new_command_text]</code>",
+    "level": "GOD",
+    "status": "Not Implemented"
   }
 }

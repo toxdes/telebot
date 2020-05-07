@@ -35,6 +35,11 @@ exports.q = {
       deleted BOOLEAN DEFAULT FALSE 
     );
 
+    CREATE TABLE IF NOT EXISTS commands(
+      id SERIAL PRIMARY KEY,
+      command VARCHAR(240) NOT NULL,
+      text VARCHAR(1024) NOT NULL,
+    );
     `,
   insert_dummy: `
         INSERT INTO subscribers(id, username) VALUES(938977975, 'cool_bro');
@@ -62,5 +67,10 @@ exports.q = {
   VALUES ($1,$2,$3,$4,current_date);`,
   get_messages_to_delete: `select * from delete_queue where AGE(created_at) > interval '1 day';`,
   select_delete_queue: `select * from delete_queue;`,
-  update_delete_queue: `delete * from delete_queue where id=$1`
+  update_delete_queue: `delete * from delete_queue where id=$1`,
+  get_user_commands: `select * FROM commands;`,
+  get_command: `select * FROM commands where command=$1;`,
+  add_alias: `INSERT INTO commands(command, text) VALUES ($1, (select text from commands where command=$2));`,
+  add_cmd: `INSERT INTO commands(command, text) VALUES ($1,$2)`,
+  update_cmd: `UPDATE commands SET text=$2 where command=$1`
 };
