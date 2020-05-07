@@ -1,6 +1,6 @@
 {
   "name": "telebot",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A bot for personal use :)",
   "main": "index.js",
   "repository": "github.com/toxdes/telebot",
@@ -14,11 +14,17 @@
   "scripts": {
     "start": "node src/index.js",
     "temp": "node src/temp.js",
+    "dev": "yarn disable && nodemon --exec node --inspect src/index.js",
     "gen-commands": "node src/gen_commands.js > temp.md && sed -ni \"/# Commands/q;p\" README.md && cat README.md temp.md > wow.md && mv wow.md README.md",
-    "dev": "nodemon --exec node --inspect src/index.js",
     "git": "git push origin master",
-    "push": "git push heroku master && yarn git",
+    "heroku": "git push heroku master",
+    "push": "yarn git && yarn heroku && yarn enable",
+    "log": "heroku logs -t",
     "enable": "heroku scale web=0 worker=1",
     "disable": "heroku scale web=0 worker=0"
+  },
+  "devDependencies": {
+    "heroku": "^7.40.0",
+    "nodemon": "^2.0.3"
   }
 }

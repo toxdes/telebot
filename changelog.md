@@ -1,7 +1,9 @@
 # Changelog
 
 Changelog for the development
-### v 0.3.0
+
+### v 0.3.2
+- - added few more dev-scripts, and updated `package.json` with `dev-dependencies`
 - Added functionality for user to add commands. So, the commands are now classified in two categories, one is core commands, and other is user commands. 
 - To manage user commands, `!addcmd`, `!alias`, `!updatecmd` and `!deletecmd` are added. 
 - `!deletecmd` is not yet implemented. Also a lot of testing is remaining. 
