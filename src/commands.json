@@ -47,7 +47,7 @@
   "promote": {
     "desc": "promote USERs to GODs.",
     "usage": "Command must be a reply to someone's message.\n\nUsage: <code>!promote</code>",
-    "level": "USER",
+    "level": "GOD",
     "status": "Implemented"
   },
   "delete": {
