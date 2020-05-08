@@ -2,6 +2,11 @@
 
 Changelog for the development
 
+### v 0.3.4
+- For `!delete`, changed interval from 1 day to 5 minutes
+- Also, need to store timestamp instead of date in `delete_queue` table, so fixed that.
+- I think this is it.
+
 ### v 0.3.3
 - Added `jest` for unit testing, but only a few tests are currently added to the test suite, so a lot of tests still need to be written. I don't know if I should waste my time writing those tests. Also need to figure out how do I use `jest` to test asynchronous code.
 - Finished implementing `!deletecmd` command.

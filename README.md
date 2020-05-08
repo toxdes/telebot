@@ -3,6 +3,11 @@
 Telegram bot to store movies information lol idk what to write here, I just want to know if I can make a bot.
 
 # What's New
+### v 0.3.4
+- For `!delete`, changed interval from 1 day to 5 minutes
+- Added `jest` for unit testing, but only a few tests are currently added to the test suite
+- Finished implementing `!deletecmd` command.
+- Added more fields to commands table to handle command aliases in a better way.
 
 ### v 0.3.0
 - Added functionality for user to add commands. So, the commands are now classified in two categories, one is core commands, and other is user commands. 
