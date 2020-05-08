@@ -476,6 +476,7 @@ const handle_command = (client, cmd, ctx) => {
 };
 
 exports.is_command = is_command;
+exports.is_able = is_able;
 exports.handle_command = handle_command;
 exports.get_message_id = get_message_id;
 exports.get_chat_id = get_chat_id;
