@@ -31,6 +31,7 @@ test('sanitize_cmd works', () => {
     expect(sanitize_cmd('////c!l')).toBe('cl');
     expect(sanitize_cmd('/c!c')).toBe('cc');
     expect(sanitize_cmd('!..!!!c!')).toBe('..c');
+    expect(sanitize_cmd('/cool@bettersharadbot')).toBe('cool');
 
 })
 

@@ -114,6 +114,10 @@ const substitute = (cmd, text) => {
 }
 
 const sanitize_cmd = (cmd) => {
+  let at_exists = cmd.search('@');
+  if (at_exists != -1) {
+    cmd = cmd.substr(0, at_exists);
+  }
   cmd = cmd.replace(new RegExp("[!/]+", 'g'), '');
   return cmd;
 }
