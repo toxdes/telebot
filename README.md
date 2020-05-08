@@ -13,7 +13,7 @@ Telegram bot to store movies information lol idk what to write here, I just want
 ### v0.2.1
 
 - Updated version for `package.json`, minor fixes.
-- Added `!delete` command, so user commands, and bot's replies to those commands older than a certain specified limit (1 day) are deleted, maintained by using a table called `delete-queue`.
+- Added `!delete` command, so user commands, and bot's replies to those commands older than a certain specified limit (5 minutes) are deleted, maintained by using a table called `delete-queue`.
 - `!notify` now sends DMs to subscribers, provided they have enabled talking to the bot
 - Removed _unnecessary_ commands from the source.
 - Cool.

@@ -1,6 +1,7 @@
 const commands = require("./commands.json");
 const { q } = require("./queries");
 const is_command = c => {
+  c = c.split(' ')[0];
   if (!c || c.length == 1) return false;
   let one = 0;
   c.split('').forEach(each => {
@@ -80,9 +81,24 @@ const delete_messages = async (client, ctx) => {
   res.rows.forEach(async row => {
     // add -100, cause supergroup
     let chat_id = Number(`-100${row.chat_id}`);
-    await ctx.telegram.deleteMessage(chat_id, row.message_id);
-    await ctx.telegram.deleteMessage(chat_id, row.reply_id);
-    await client.query(q.update_delete_queue, [each.id]);
+    try {
+      await ctx.telegram.deleteMessage(chat_id, row.message_id);
+    } catch (e) {
+      console.log(`couldn't delete message:${row.message_id}`);
+      console.error(e);
+    }
+    try {
+      await ctx.telegram.deleteMessage(chat_id, row.reply_id);
+    } catch (e) {
+      console.log(`couldn't delete reply: ${row.reply_id}`);
+      console.error(e);
+    }
+    try {
+      await client.query(q.update_delete_queue, [row.id]);
+    } catch (e) {
+      console.log(`couldn't update delete_queue: ${row.message_id}`);
+      console.error(e);
+    }
   });
 };
 
@@ -103,6 +119,7 @@ const sanitize_cmd = (cmd) => {
 }
 const handle_command = (client, cmd, ctx) => {
   let c = cmd.split(" ");
+  console.log("command before is: ", c);
   c = sanitize_cmd(c[0]);
   console.log("command is:", c);
   switch (c) {
@@ -112,6 +129,9 @@ const handle_command = (client, cmd, ctx) => {
         res = `${res}\n\nAnyways, these are the core commands I currently support.\n\n`;
         Object.keys(commands).map(each => {
           res = `${res}<code>!${each}</code> => ${commands[each].desc}`;
+          if (commands[each].status == "Not Implemented") {
+            res = `${res}(not implemented yet).`
+          }
           res = `${res}\n\n`;
         });
         let cool = await client.query(q.get_user_commands);
@@ -363,7 +383,7 @@ const handle_command = (client, cmd, ctx) => {
       return async () => {
         // testing delete queue
         await delete_messages(client, ctx);
-        return "Deleted unimportant messages that were older than 1 day.";
+        return "Deleted unimportant messages that were older than 5 minutes.";
       };
     case "alias":
       return async () => {
@@ -419,6 +439,7 @@ const handle_command = (client, cmd, ctx) => {
           if (cmd_str in Object.keys(commands) || exists_cmd.rowCount != 0) {
             return `There is already a command for <code>!${cmd_str}</code>.\n\n${err_message}`
           }
+          console.log(`Command to be added ${cmd_str} and text is ${text}`);
           await client.query(q.add_cmd, [cmd_str, text]);
           return `Done.😊\n\n Added command <code>${cmd_str}</code>`;
         };
@@ -467,6 +488,7 @@ const handle_command = (client, cmd, ctx) => {
         let cmd_str = args[1];
         if (is_able(who, commands.deletecmd.level)) {
           await client.query(q.delete_cmd, [cmd_str]);
+          return `Done.😊\n\nDeleted <code>${cmd_str}</code> and it's possible aliases.`;
         }
         return err_message;
       };

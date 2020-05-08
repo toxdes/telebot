@@ -31,7 +31,7 @@ exports.q = {
       message_id INTEGER NOT NULL,
       reply_id INTEGER NOT NULL, 
       bot_id INTEGER NOT NULL,
-      created_at DATE,
+      created_at timestamp,
       deleted BOOLEAN DEFAULT FALSE 
     );
 
@@ -66,15 +66,15 @@ exports.q = {
   get_active_gods: `SELECT * FROM subscribers where roll=$1 AND notifications=TRUE;`,
   insert_into_delete_queue: `INSERT INTO delete_queue 
   (message_id, bot_id, reply_id, chat_id, created_at)
-  VALUES ($1,$2,$3,$4,current_date);`,
-  get_messages_to_delete: `select * from delete_queue where AGE(created_at) > interval '1 day';`,
+  VALUES ($1,$2,$3,$4,current_timestamp);`,
+  get_messages_to_delete: `select * from delete_queue where AGE(current_timestamp, created_at) > interval '5 min';`,
   select_delete_queue: `select * from delete_queue;`,
-  update_delete_queue: `delete * from delete_queue where id=$1`,
+  update_delete_queue: `delete from delete_queue where id=$1`,
   get_user_commands: `select * from commands where is_alias=false;`,
   get_aliases: `select * from commands where is_alias=true;`,
   get_cmd: `select * FROM commands where command=$1;`,
   add_alias: `INSERT INTO commands(command, text, is_alias, aliased_to) VALUES ($1, (select text from commands where command=$2), TRUE, $2);`,
-  add_cmd: `INSERT INTO commands(command, text, is_alias) VALUES ($1,$2,FALSE)`,
-  update_cmd: `UPDATE commands SET text=$2 where command=$1 OR aliased_to=$1`,
-  delete_cmd: `DELETE * from commands where command=$1 or aliased_to=$1`
+  add_cmd: `INSERT INTO commands(command, text, is_alias) VALUES ($1,$2,FALSE);`,
+  update_cmd: `UPDATE commands SET text=$2 where command=$1 OR command=(select aliased_to from commands where command=$1);`,
+  delete_cmd: `DELETE FROM commands WHERE command=$1 or aliased_to=$1;`
 };
