@@ -98,11 +98,8 @@ const substitute = (cmd, text) => {
 }
 
 const sanitize_cmd = (cmd) => {
-  while (cmd[0] == '!' || cmd[0] == '/') {
-    cmd = cmd.substr(1);
-  }
-  if (cmd)
-    return cmd;
+  cmd = cmd.replace(new RegExp("[!/]+", 'g'), '');
+  return cmd;
 }
 const handle_command = (client, cmd, ctx) => {
   let c = cmd.split(" ");
@@ -481,3 +478,4 @@ exports.handle_command = handle_command;
 exports.get_message_id = get_message_id;
 exports.get_chat_id = get_chat_id;
 exports.substitute = substitute;
+exports.sanitize_cmd = sanitize_cmd;
