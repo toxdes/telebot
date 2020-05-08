@@ -1,5 +1,5 @@
 exports.q = {
-  drop_tables: `DROP TABLE IF EXISTS rating; DROP TABLE IF EXISTS movies; DROP TABLE IF EXISTS subscribers;`,
+  drop_tables: `DROP TABLE IF EXISTS commands; DROP TABLE IF EXISTS rating; DROP TABLE IF EXISTS movies; DROP TABLE IF EXISTS subscribers;`,
   create_tables: `
     CREATE TABLE IF NOT EXISTS subscribers(
         id INTEGER PRIMARY KEY,
@@ -37,8 +37,10 @@ exports.q = {
 
     CREATE TABLE IF NOT EXISTS commands(
       id SERIAL PRIMARY KEY,
-      command VARCHAR(240) NOT NULL,
-      text VARCHAR(1024) NOT NULL
+      command VARCHAR(240) NOT NULL UNIQUE,
+      text VARCHAR(1024) NOT NULL,
+      is_alias BOOLEAN NOT NULL,
+      aliased_to VARCHAR(240)
     );
     `,
   insert_dummy: `
@@ -68,9 +70,11 @@ exports.q = {
   get_messages_to_delete: `select * from delete_queue where AGE(created_at) > interval '1 day';`,
   select_delete_queue: `select * from delete_queue;`,
   update_delete_queue: `delete * from delete_queue where id=$1`,
-  get_user_commands: `select * from commands;`,
-  get_command: `select * FROM commands where command=$1;`,
-  add_alias: `INSERT INTO commands(command, text) VALUES ($1, (select text from commands where command=$2));`,
-  add_cmd: `INSERT INTO commands(command, text) VALUES ($1,$2)`,
-  update_command: `UPDATE commands SET text=$2 where command=$1`
+  get_user_commands: `select * from commands where is_alias=false;`,
+  get_aliases: `select * from commands where is_alias=true;`,
+  get_cmd: `select * FROM commands where command=$1;`,
+  add_alias: `INSERT INTO commands(command, text, is_alias, aliased_to) VALUES ($1, (select text from commands where command=$2), TRUE, $2);`,
+  add_cmd: `INSERT INTO commands(command, text, is_alias) VALUES ($1,$2,FALSE)`,
+  update_cmd: `UPDATE commands SET text=$2 where command=$1 OR aliased_to=$1`,
+  delete_cmd: `DELETE * from commands where command=$1 or aliased_to=$1`
 };

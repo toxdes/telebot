@@ -379,12 +379,12 @@ const handle_command = (client, cmd, ctx) => {
           }
           let alias_str = sanitize_cmd(args[1]);
           let cmd_str = sanitize_cmd(args[2]);
-          let exists_alias = await client.query(q.get_command, [alias_str]);
+          let exists_alias = await client.query(q.get_cmd, [alias_str]);
           if (alias_str in Object.keys(commands) || exists_alias.rowCount != 0) {
             return `There is already a command for ${alias_str}.\n\n${err_message}`
           }
           // check if second argument is already a command
-          let exists_cmd = await client.query(q.get_command, [cmd_str]);
+          let exists_cmd = await client.query(q.get_cmd, [cmd_str]);
           if (exists_cmd.rowCount == 0) {
             return `There's no such command ${cmd_str}.\n\n${err_message}`;
           }
@@ -415,7 +415,7 @@ const handle_command = (client, cmd, ctx) => {
           }
           let cmd_str = sanitize_cmd(args[1]);
           let text = args.slice(2).join(' ');
-          let exists_cmd = await client.query(q.get_command, [cmd_str]);
+          let exists_cmd = await client.query(q.get_cmd, [cmd_str]);
           if (cmd_str in Object.keys(commands) || exists_cmd.rowCount != 0) {
             return `There is already a command for <code>!${cmd_str}</code>.\n\n${err_message}`
           }
@@ -438,7 +438,7 @@ const handle_command = (client, cmd, ctx) => {
             return err_message;
           }
           let cmd_str = sanitize_cmd(args[1]);
-          let exists_cmd = await client.query(q.get_command, [cmd_str]);
+          let exists_cmd = await client.query(q.get_cmd, [cmd_str]);
           if (cmd_str in Object.keys(commands)) {
             return `Cannot update core commands. ${cmd_str}.\n\n${err_message}`
           }
@@ -449,17 +449,30 @@ const handle_command = (client, cmd, ctx) => {
           let text = args.slice(2).join(' ');
           // now it's okay to add that alias
           // TODO: Have a separate table for aliases, for now, it's unnecessarily duplicating data. 
-          await client.query(q.update_command, [cmd_str, text]);
+          await client.query(q.update_cmd, [cmd_str, text]);
 
           return `Done.😊\n\nUpdated <code>${cmd_str}</code>.`;
         };
         return err_message;
       };
     case "deletecmd":
-      return async () => "Not Implemented Yet. 😊";
+      return async () => {
+        let args = cmd.split(' ');
+        let who = await get_privilige(client, ctx.message.from.id);
+        console.log("result of privilige level query:", who);
+        const err_message = `😕\nDo you even know how to use this?\n<code>!deletecmd</code>: <i>${commands.deletecmd.desc}</i>\n\n${commands.deletecmd.usage}\n`;
+        if (args.length != 2) {
+          return err_message;
+        }
+        let cmd_str = args[1];
+        if (is_able(who, commands.deletecmd.level)) {
+          await client.query(q.delete_cmd, [cmd_str]);
+        }
+        return err_message;
+      };
     default:
       return async () => {
-        let cool = await client.query(q.get_command, [c]);
+        let cool = await client.query(q.get_cmd, [c]);
         let res = "Not implemented yet. 😊";
         console.log(cool);
         if (cool.rowCount != 0 && cool.rows) {

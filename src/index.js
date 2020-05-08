@@ -5,6 +5,7 @@ const { Client } = require("pg");
 const { is_command, handle_command, get_chat_id } = require("./helpers");
 
 const { q } = require("./queries");
+// const commands = require("./commands.json");
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -12,8 +13,11 @@ const client = new Client({
 });
 
 
+
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.context.BOT_USERNAME = process.env.BOT_USERNAME;
+// bot.command(Object.keys(commands));
+
 client.connect(err => {
   if (err) {
     console.log("Couldn't connect to database.");
@@ -30,7 +34,7 @@ bot.on("text", async ctx => {
   await client.query(q.create_tables);
   // await client.query(q.insert_dummy);
 
-  console.log(`recieved: ${message_text}`);
+  console.log(`received: ${message_text}`);
   let options = {};
   // if (message_id != -1) {
   //   console.log(`message_id: ${message_id}`);
@@ -59,7 +63,7 @@ bot.on("text", async ctx => {
     // don't reply anythin, the user wasn't talking to the bot
     return;
   }
-  console.log(ctx);
+  // console.log(ctx);
   if (!res) {
     return;
   }

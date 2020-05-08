@@ -1,4 +1,9 @@
 {
+  "help": {
+    "desc": "This very message, you idiot!",
+    "level": "NOBODY",
+    "status": "Implemented"
+  },
   "who": {
     "desc": "Literally tells who they <i> really </i>are lol.",
     "user_string": "I just want to take this moment to be thankful to him.\n\nHe has already devoted his life for me.\nHe's a peaceful USER.☺️",
@@ -12,23 +17,6 @@
     "desc": "Send a notification to all subscribers.",
     "usage": "Command must be a reply to some message. You need to be at least a USER.\n\nHow about some <code>!sub</code>...?\n\n😁😁",
     "level": "USER",
-    "status": "Implemented"
-  },
-  "rate": {
-    "desc": "Give YOUR rating to a movie you watched.",
-    "usage": " Command must be a reply to some message.\nRating must be on a scale of (0,10].\n<code>!rate your_rating </code>",
-    "level": "USER",
-    "status": "Not Implemented"
-  },
-  "add": {
-    "desc": "Add a movie to the database",
-    "usage": "Requires GOD privilige. Refernced message must be in proper format, so that title and other details can be extracted",
-    "level": "GOD",
-    "status": "Not Implemented"
-  },
-  "help": {
-    "desc": "This very message, you idiot!",
-    "level": "NOBODY",
     "status": "Implemented"
   },
   "sub": {
@@ -59,7 +47,7 @@
   "promote": {
     "desc": "promote USERs to GODs.",
     "usage": "Command must be a reply to someone's message.\n\nUsage: <code>!promote</code>",
-    "level": "GOD",
+    "level": "USER",
     "status": "Implemented"
   },
   "delete": {
@@ -83,11 +71,23 @@
     "desc": "Update an existing user defined command.",
     "usage": "Requires GOD privilige. Usage: <code>!updatecmd [command] [new_command_text]</code>",
     "level": "GOD",
-    "status": "Not Implemented"
+    "status": "Implemented"
   },
   "deletecmd": {
     "desc": "Delete an existing user defined command.",
     "usage": "Requires GOD privilige. Usage: <code>!deletecmd [command]</code>",
+    "level": "GOD",
+    "status": "Implemented"
+  },
+  "rate": {
+    "desc": "Give YOUR rating to a movie you watched.",
+    "usage": " Command must be a reply to some message.\nRating must be on a scale of (0,10].\n<code>!rate your_rating </code>",
+    "level": "USER",
+    "status": "Not Implemented"
+  },
+  "add": {
+    "desc": "Add a movie to the database",
+    "usage": "Requires GOD privilige. Refernced message must be in proper format, so that title and other details can be extracted",
     "level": "GOD",
     "status": "Not Implemented"
   }
