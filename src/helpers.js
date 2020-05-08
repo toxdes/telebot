@@ -1,8 +1,13 @@
 const commands = require("./commands.json");
 const { q } = require("./queries");
 const is_command = c => {
-  if (!c) return;
-  return c[0] == "!" || c[0] == "/";
+  if (!c || c.length == 1) return false;
+  let one = 0;
+  c.split('').forEach(each => {
+    if (each == '!' || each == '/') one++;
+  });
+
+  return (c[0] == "!" || c[0] == "/") && one == 1;
 };
 
 const get_message_id = ctx => {
@@ -12,6 +17,8 @@ const get_message_id = ctx => {
 };
 
 const is_able = (who_is, who_can) => {
+  who_is = who_is.toUpperCase();
+  who_can = who_can.toUpperCase();
   let levels = {
     NOBODY: 0,
     USER: 1,
