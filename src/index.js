@@ -8,7 +8,7 @@ const { q } = require("./queries");
 // const commands = require("./commands.json");
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: (process.env.DEV_DATABASE_URL) ? process.env.DEV_DATABASE_URL : process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
