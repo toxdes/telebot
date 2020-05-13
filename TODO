@@ -1,6 +1,10 @@
 
 Now:
-
+  ■ learning how to maintain two branches, one master and other develop.
+    this stuff is so difficult.
+    I'm now doing this changes in develop. But suppose they are not good enough to be merged into master yet, so I will stage and commit this, and will do `yarn git`.
+    what I'm expecting to happen is master remains unchanged and develop branch should be one commit ahead. Otherwise three commits ahead. 
+    I'm not even going to checkout master, push right away from develop. 
 Future:
   ■ Work on `!rate`
     ■ add `!trust` command
