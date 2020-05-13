@@ -16,7 +16,7 @@
     "temp": "node src/temp.js",
     "dev": "nodemon --exec node --inspect src/index.js",
     "gen-commands": "node src/gen_commands.js > temp.md && sed -ni \"/# Commands/q;p\" README.md && cat README.md temp.md > wow.md && mv wow.md README.md",
-    "git": "git push origin master && git push origin develop",
+    "git": "git push origin master develop",
     "heroku": "git push heroku master",
     "push": "yarn git && yarn heroku && yarn enable",
     "log": "heroku logs -t",
