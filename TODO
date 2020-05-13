@@ -1,16 +1,6 @@
 
 Now:
-  ■ learning how to maintain two branches, one master and other develop.
-    this stuff is so difficult.
-    I'm now doing this changes in develop. But suppose they are not good enough to be merged into master yet, so I will stage and commit this, and will do `yarn git`.
-    what I'm expecting to happen is master remains unchanged and develop branch should be one commit ahead. Otherwise three commits ahead. 
-    I'm not even going to checkout master, push right away from develop. 
-    Okay, I rebased develop branch from master, and added this very line here. So, I'm expecting develop branch to be 4 commits ahead, and 0 commits behind master.
-    Master should be unchanged.
-  there's a lot of things going on the develop branch, as a learning objective, I'm editing this file from github online editor. I think I will commit this.
-  What I expect to happen is I would need to pull these changes to the local repo, go to develop, and rebase it
-  cause it's the latest unexpected change in master from somewhere else.
-  Bro, it's way too complicated. This is the final text that I'm adding. Then I'll push this to remote, and then locally merge with master, so that these so called features are merged from develop to release, cause you know, they're "stable".
+  
 
 Future:
   ■ Work on `!rate`
