@@ -3,15 +3,17 @@ Todo:
   ☐ Work on `!rate`
     ☐ add `!trust` command
       1. create a new field for subscribers table, named `is_trusted` and `trusted_by`.
-      2. command will have god privilige.
+      2. command will have god privilige and will be a reply to a message, if already trusted it toggles  it.
       3. Each rating will be recorded, but the movie's rating will reflect only with the trusted users.
       4. Once the user is trusted, maybe the movie's rating can be updated with changes.
     ☐ should have alter table query to alter columns of tables
       because the test and production databases are different
     ☐ figure out proper format of the movie's details
       1. shold the process be automated?
-      2. categories with hashtags
+      2. categories with hashtags, rating from IMDb, maybe through API or through a bot.
       3. easily searchable with commands such as `!search [movie/category]`, `!giveme` etc.
+      4. also try out interactive messaging, with gods, like the spotify bot does?
+      ☐ rating algorithm for calculating both user's rating, and movie's rating
 
 
   ☐ `!help` command should only show relevant commands
@@ -21,4 +23,6 @@ Todo:
   ☐ `!delete` shouldn't delete messages that might be relevant 
     For example, messages with `!notify`, `!suggest` etc are relevant for everyone, so they shouldn't be deleted.
     So, delete_queue check should have a exclude list for commands, and such commands should be excluded from `delete_queue`.
+  ☐ `!notify` command should send message-copy to the sender as well, just append that text.
+  ☐ Refactor Code, probably the handle command and such things.
 
