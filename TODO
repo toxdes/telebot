@@ -10,6 +10,7 @@ Now:
   there's a lot of things going on the develop branch, as a learning objective, I'm editing this file from github online editor. I think I will commit this.
   What I expect to happen is I would need to pull these changes to the local repo, go to develop, and rebase it
   cause it's the latest unexpected change in master from somewhere else.
+  Bro, it's way too complicated. This is the final text that I'm adding. Then I'll push this to remote, and then locally merge with master, so that these so called features are merged from develop to release, cause you know, they're "stable".
 
 Future:
   ■ Work on `!rate`
