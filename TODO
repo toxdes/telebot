@@ -1,5 +1,8 @@
 
 Now:
+  there's a lot of things going on the develop branch, as a learning objective, I'm editing this file from github online editor. I think I will commit this.
+  What I expect to happen is I would need to pull these changes to the local repo, go to develop, and rebase it
+  cause it's the latest unexpected change in master from somewhere else.
 
 Future:
   ■ Work on `!rate`
