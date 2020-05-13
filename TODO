@@ -7,6 +7,10 @@ Now:
     I'm not even going to checkout master, push right away from develop. 
     Okay, I rebased develop branch from master, and added this very line here. So, I'm expecting develop branch to be 4 commits ahead, and 0 commits behind master.
     Master should be unchanged.
+  there's a lot of things going on the develop branch, as a learning objective, I'm editing this file from github online editor. I think I will commit this.
+  What I expect to happen is I would need to pull these changes to the local repo, go to develop, and rebase it
+  cause it's the latest unexpected change in master from somewhere else.
+
 Future:
   ■ Work on `!rate`
     ■ add `!trust` command
