@@ -5,6 +5,8 @@ Now:
     I'm now doing this changes in develop. But suppose they are not good enough to be merged into master yet, so I will stage and commit this, and will do `yarn git`.
     what I'm expecting to happen is master remains unchanged and develop branch should be one commit ahead. Otherwise three commits ahead. 
     I'm not even going to checkout master, push right away from develop. 
+    Okay, I rebased develop branch from master, and added this very line here. So, I'm expecting develop branch to be 4 commits ahead, and 0 commits behind master.
+    Master should be unchanged.
 Future:
   ■ Work on `!rate`
     ■ add `!trust` command
