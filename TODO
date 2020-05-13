@@ -1,0 +1,24 @@
+
+Todo:
+  ☐ Work on `!rate`
+    ☐ add `!trust` command
+      1. create a new field for subscribers table, named `is_trusted` and `trusted_by`.
+      2. command will have god privilige.
+      3. Each rating will be recorded, but the movie's rating will reflect only with the trusted users.
+      4. Once the user is trusted, maybe the movie's rating can be updated with changes.
+    ☐ should have alter table query to alter columns of tables
+      because the test and production databases are different
+    ☐ figure out proper format of the movie's details
+      1. shold the process be automated?
+      2. categories with hashtags
+      3. easily searchable with commands such as `!search [movie/category]`, `!giveme` etc.
+
+
+  ☐ `!help` command should only show relevant commands
+    ☐ currently everything just gets clogged up, if there are lot of commands.A lot of GOD level commands are not at all useful for USERs and NOBODY. So, show only those that are relevant.
+    ☐ Also, it might happen that user added commands are a lot. Maybe have a global message that stores, and is updated everytime the command is updated, and it should be DMd/redirected with a link to that global message to the user?
+  
+  ☐ `!delete` shouldn't delete messages that might be relevant 
+    For example, messages with `!notify`, `!suggest` etc are relevant for everyone, so they shouldn't be deleted.
+    So, delete_queue check should have a exclude list for commands, and such commands should be excluded from `delete_queue`.
+
