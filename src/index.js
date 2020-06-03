@@ -2,17 +2,23 @@ require("dotenv").config();
 const Telegraf = require("telegraf");
 
 const { Client } = require("pg");
-const { is_command, handle_command, get_chat_id } = require("./helpers");
+const {
+  is_command,
+  handle_command,
+  get_chat_id,
+  sanitize_cmd,
+  exclude_list
+} = require("./helpers");
 
 const { q } = require("./queries");
 // const commands = require("./commands.json");
 
 const client = new Client({
-  connectionString: (process.env.DEV_DATABASE_URL) ? process.env.DEV_DATABASE_URL : process.env.DATABASE_URL,
+  connectionString: process.env.DEV_DATABASE_URL
+    ? process.env.DEV_DATABASE_URL
+    : process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
-
-
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.context.BOT_USERNAME = process.env.BOT_USERNAME;
@@ -52,7 +58,8 @@ bot.on("text", async ctx => {
   };
   options["reply_to_message_id"] = ctx.message.message_id;
   if (is_command(message_text)) {
-    should_keep = true;
+    let cmd = sanitize_cmd(message_text.split(" ")[0]);
+    should_keep = !exclude_list.includes(cmd);
     try {
       res = await handle_command(client, message_text, ctx)();
     } catch (e) {

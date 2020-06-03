@@ -23,7 +23,7 @@ Future:
     ■ currently everything just gets clogged up, if there are lot of commands.A lot of GOD level commands are not at all useful for USERs and NOBODY. So, show only those that are relevant.
     ■ Also, it might happen that user added commands are a lot. Maybe have a global message that stores, and is updated everytime the command is updated, and it should be DMd/redirected with a link to that global message to the user?
   
-  ■ `!delete` shouldn't delete messages that might be relevant 
+  ✔ `!delete` shouldn't delete messages that might be relevant @started(20-06-03 16:35) @done(20-06-03 16:59) @lasted(24m32s)
     For example, messages with `!notify`, `!suggest` etc are relevant for everyone, so they shouldn't be deleted.
     So, delete_queue check should have a exclude list for commands, and such commands should be excluded from `delete_queue`.
   ■ `!notify` command should send message-copy to the sender as well, just append that text.

@@ -1,11 +1,16 @@
 const commands = require("./commands.json");
 const { q } = require("./queries");
+
+const exclude_list = Object.keys(commands).filter(
+  each => commands[each].exclude_from_delete === true
+);
+
 const is_command = c => {
-  c = c.split(' ')[0];
+  c = c.split(" ")[0];
   if (!c || c.length == 1) return false;
   let one = 0;
-  c.split('').forEach(each => {
-    if (each == '!' || each == '/') one++;
+  c.split("").forEach(each => {
+    if (each == "!" || each == "/") one++;
   });
 
   return (c[0] == "!" || c[0] == "/") && one == 1;
@@ -105,22 +110,22 @@ const delete_messages = async (client, ctx) => {
 // to handle user commands, substitute %s's of the command with desired text
 const substitute = (cmd, text) => {
   let replacement = cmd.split(" ").slice(1);
-  replacement = replacement.join(' ');
+  replacement = replacement.join(" ");
   console.log("replacement is ", replacement);
   // TODO: Fix this, don't know regex
-  text = text.replace(new RegExp("\%s", 'g'), replacement);
+  text = text.replace(new RegExp("%s", "g"), replacement);
   console.log("Final reply should be ", text);
   return text;
-}
+};
 
-const sanitize_cmd = (cmd) => {
-  let at_exists = cmd.search('@');
+const sanitize_cmd = cmd => {
+  let at_exists = cmd.search("@");
   if (at_exists != -1) {
     cmd = cmd.substr(0, at_exists);
   }
-  cmd = cmd.replace(new RegExp("[!/]+", 'g'), '');
+  cmd = cmd.replace(new RegExp("[!/]+", "g"), "");
   return cmd;
-}
+};
 const handle_command = (client, cmd, ctx) => {
   let c = cmd.split(" ");
   console.log("command before is: ", c);
@@ -134,15 +139,18 @@ const handle_command = (client, cmd, ctx) => {
         Object.keys(commands).map(each => {
           res = `${res}<code>!${each}</code> => ${commands[each].desc}`;
           if (commands[each].status == "Not Implemented") {
-            res = `${res}(not implemented yet).`
+            res = `${res}(not implemented yet).`;
           }
           res = `${res}\n\n`;
         });
         let cool = await client.query(q.get_user_commands);
         if (cool.rowCount != 0 && cool.rows) {
-          res = `${res}\n\nI also support these user added commands. So, if you think it's stupid, you should know that I was also thinking the same.\n\n`
+          res = `${res}\n\nI also support these user added commands. So, if you think it's stupid, you should know that I was also thinking the same.\n\n`;
           cool.rows.forEach(row => {
-            res = `${res}\n<code>${row.command}</code> => ${substitute(`$!{row.command} [message]`, row.text)}`
+            res = `${res}\n<code>${row.command}</code> => ${substitute(
+              `$!{row.command} [message]`,
+              row.text
+            )}`;
           });
         }
         return res;
@@ -166,11 +174,11 @@ const handle_command = (client, cmd, ctx) => {
               each.id,
               `Yo.\n<i>${username}</i> wants to tell y'all something.
               \n\n <a href="https://t.me/c/${group_id}/${
-              ctx.message.message_id
+                ctx.message.message_id
               }">Take a look.</a>
             \n\n<i>You are recieving this because you asked me to do so.</i>\n${
               !has ? "Also, why don't you have a username yet?" : ""
-              }`,
+            }`,
               { parse_mode: "HTML" }
             );
           } catch (e) {
@@ -264,27 +272,27 @@ const handle_command = (client, cmd, ctx) => {
           case "USER":
             return `You wanted to know about <i>${username}</i>? 😳\n\n${
               commands.who.user_string
-              }.\n${
+            }.\n${
               !has
                 ? "\n<i>The sad part is, he doesn't have a username.</i>"
                 : ""
-              }`;
+            }`;
           case "GOD":
             return `You wanted to know about <i>${username}</i>? 😳\n\n${
               commands.who.god_string
-              }.\n${
+            }.\n${
               !has
                 ? "\n<i>The sad part is, he doesn't have a username.</i>"
                 : ""
-              }`;
+            }`;
           default:
             return `You wanted to know about <i>${username}</i>? 😳\n\n${
               commands.who.nobody_string
-              }.\n${
+            }.\n${
               !has
                 ? "\n<i>The sad part is, he doesn't have a username.</i>"
                 : ""
-              }`;
+            }`;
         }
       };
     case "sub":
@@ -299,9 +307,9 @@ const handle_command = (client, cmd, ctx) => {
           await client.query(q.subscribe, [ctx.message.from.id, username]);
           return `Tap Here -> ${
             ctx.BOT_USERNAME
-            }, then tap on start button, otherwise I won't be able to talk to you.\n\n\n${
+          }, then tap on start button, otherwise I won't be able to talk to you.\n\n\n${
             commands.sub.success_message
-            }.\n\n\n${!has ? "Bruh. Why don't you have a username yet?" : ""}`;
+          }.\n\n\n${!has ? "Bruh. Why don't you have a username yet?" : ""}`;
         } catch (e) {
           return err_message;
         }
@@ -397,15 +405,18 @@ const handle_command = (client, cmd, ctx) => {
 
         if (is_able(who, commands.alias.level)) {
           // check if first argument is already not an alias / command
-          let args = cmd.split(' ');
+          let args = cmd.split(" ");
           if (args.length != 3) {
             return err_message;
           }
           let alias_str = sanitize_cmd(args[1]);
           let cmd_str = sanitize_cmd(args[2]);
           let exists_alias = await client.query(q.get_cmd, [alias_str]);
-          if (alias_str in Object.keys(commands) || exists_alias.rowCount != 0) {
-            return `There is already a command for ${alias_str}.\n\n${err_message}`
+          if (
+            alias_str in Object.keys(commands) ||
+            exists_alias.rowCount != 0
+          ) {
+            return `There is already a command for ${alias_str}.\n\n${err_message}`;
           }
           // check if second argument is already a command
           let exists_cmd = await client.query(q.get_cmd, [cmd_str]);
@@ -417,13 +428,13 @@ const handle_command = (client, cmd, ctx) => {
           }
 
           // now it's okay to add that alias
-          // TODO: Have a separate table for aliases, for now, it's unnecessarily duplicating data. 
+          // TODO: Have a separate table for aliases, for now, it's unnecessarily duplicating data.
           await client.query(q.add_alias, [alias_str, cmd_str]);
 
           return `Done.😊\n\n Aliased <code>${cmd_str}</code> to <code>${alias_str}</code>`;
-        };
+        }
         return err_message;
-      }
+      };
 
     case "addcmd":
       return async () => {
@@ -433,22 +444,22 @@ const handle_command = (client, cmd, ctx) => {
 
         if (is_able(who, commands.addcmd.level)) {
           // check if first argument is already not an alias / command
-          let args = cmd.split(' ');
+          let args = cmd.split(" ");
           if (args.length < 3) {
             return err_message;
           }
           let cmd_str = sanitize_cmd(args[1]);
-          let text = args.slice(2).join(' ');
+          let text = args.slice(2).join(" ");
           let exists_cmd = await client.query(q.get_cmd, [cmd_str]);
           if (cmd_str in Object.keys(commands) || exists_cmd.rowCount != 0) {
-            return `There is already a command for <code>!${cmd_str}</code>.\n\n${err_message}`
+            return `There is already a command for <code>!${cmd_str}</code>.\n\n${err_message}`;
           }
           console.log(`Command to be added ${cmd_str} and text is ${text}`);
           await client.query(q.add_cmd, [cmd_str, text]);
           return `Done.😊\n\n Added command <code>${cmd_str}</code>`;
-        };
+        }
         return err_message;
-      }
+      };
 
     case "updatecmd":
       return async () => {
@@ -458,31 +469,31 @@ const handle_command = (client, cmd, ctx) => {
 
         if (is_able(who, commands.updatecmd.level)) {
           // check if first argument is already a user command / alias
-          let args = cmd.split(' ');
+          let args = cmd.split(" ");
           if (args.length < 3) {
             return err_message;
           }
           let cmd_str = sanitize_cmd(args[1]);
           let exists_cmd = await client.query(q.get_cmd, [cmd_str]);
           if (cmd_str in Object.keys(commands)) {
-            return `Cannot update core commands. ${cmd_str}.\n\n${err_message}`
+            return `Cannot update core commands. ${cmd_str}.\n\n${err_message}`;
           }
           if (exists_cmd.rowCount == 0) {
-            return `There's no such command as <code>${cmd_str}</code>.\n\n${err_message}`
+            return `There's no such command as <code>${cmd_str}</code>.\n\n${err_message}`;
           }
 
-          let text = args.slice(2).join(' ');
+          let text = args.slice(2).join(" ");
           // now it's okay to add that alias
-          // TODO: Have a separate table for aliases, for now, it's unnecessarily duplicating data. 
+          // TODO: Have a separate table for aliases, for now, it's unnecessarily duplicating data.
           await client.query(q.update_cmd, [cmd_str, text]);
 
           return `Done.😊\n\nUpdated <code>${cmd_str}</code>.`;
-        };
+        }
         return err_message;
       };
     case "deletecmd":
       return async () => {
-        let args = cmd.split(' ');
+        let args = cmd.split(" ");
         let who = await get_privilige(client, ctx.message.from.id);
         console.log("result of privilige level query:", who);
         const err_message = `😕\nDo you even know how to use this?\n<code>!deletecmd</code>: <i>${commands.deletecmd.desc}</i>\n\n${commands.deletecmd.usage}\n`;
@@ -518,3 +529,4 @@ exports.get_message_id = get_message_id;
 exports.get_chat_id = get_chat_id;
 exports.substitute = substitute;
 exports.sanitize_cmd = sanitize_cmd;
+exports.exclude_list = exclude_list;
