@@ -167,12 +167,12 @@ const handle_command = (client, cmd, ctx) => {
         let temp = "Cool. I'm doing what I can.";
         res.rows.map(async each => {
           try {
-            if (each.id == ctx.message.from.id) {
-              return;
-            }
+            const is_self = each.id == ctx.message.from.id;
             await ctx.telegram.sendMessage(
               each.id,
-              `Yo.\n<i>${username}</i> wants to tell y'all something.
+              `${
+                is_self ? `<i>This is what I sent to everyone.</i>\n` : ``
+              }Yo.\n<i>${username}</i> wants to tell y'all something.
               \n\n <a href="https://t.me/c/${group_id}/${
                 ctx.message.message_id
               }">Take a look.</a>
