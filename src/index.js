@@ -7,14 +7,15 @@ const {
   handle_command,
   get_chat_id,
   sanitize_cmd,
-  exclude_list
+  exclude_list,
+  is_prod
 } = require("./helpers");
 
 const { q } = require("./queries");
-// const commands = require("./commands.json");
 
+// create a postgres db client
 const client = new Client({
-  connectionString: process.env.DEV_DATABASE_URL
+  connectionString: is_prod()
     ? process.env.DEV_DATABASE_URL
     : process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
@@ -30,8 +31,9 @@ client.connect(err => {
     console.error(err);
   }
 });
-
-console.log("bot started!");
+console.log(
+  `bot started in ${is_prod() ? "production" : "development"} environment`
+);
 
 bot.on("text", async ctx => {
   const message_text = ctx.message.text;

@@ -1,9 +1,13 @@
-const commands = require("./commands.json");
+let commands = require("./commands.json");
 const { q } = require("./queries");
 
 const exclude_list = Object.keys(commands).filter(
   each => commands[each].exclude_from_delete === true
 );
+
+// Determine if the environment is production / dev
+// If DEV_DATABASE_URL exists in the environment then it's a dev environment otherwise it's a production environment
+const is_prod = () => process.env.DEV_DATABASE_URL === undefined;
 
 const is_command = c => {
   c = c.split(" ")[0];
@@ -530,3 +534,5 @@ exports.get_chat_id = get_chat_id;
 exports.substitute = substitute;
 exports.sanitize_cmd = sanitize_cmd;
 exports.exclude_list = exclude_list;
+exports.is_prod = is_prod;
+exports.commands = commands;
