@@ -343,7 +343,13 @@ const handle_command = (client, cmd, ctx) => {
               who_to_promote_username
             ]);
           }
-          if (is_able(promoter_privilige, commands.promote.level)) {
+          // if it's a dev environment then users can promote themselves, makes development way easier
+          if (
+            is_able(
+              promoter_privilige,
+              is_prod() ? commands.promote.level : "USER"
+            )
+          ) {
             await client.query(q.update_privilige, [who_to_promote_id, "GOD"]);
             return `Done!😊\n\n<i>${who_to_promote_username}</i> is a GOD now.🥳🥳\n\nI hope he knows that with great power, comes great responsibility.`;
           }
