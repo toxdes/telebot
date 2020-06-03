@@ -23,6 +23,7 @@ const client = new Client({
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.context.BOT_USERNAME = process.env.BOT_USERNAME;
+bot.context.CHANNEL_USERNAME = process.env.CHANNEL_USERNAME;
 // bot.command(Object.keys(commands));
 
 client.connect(err => {

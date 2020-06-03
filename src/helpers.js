@@ -230,7 +230,32 @@ const handle_command = (client, cmd, ctx) => {
           if (message_id == -1) {
             return err_message;
           }
-          await client.query(q.add_movie, [message_id, ctx.message.from.id]);
+          // TODO: Finish all below
+          // await client.query(q.add_movie, [message_id, ctx.message.from.id]);
+          // TODO: send a message to the channel
+          const sent_message = await ctx.telegram.sendMessage(
+            ctx.CHANNEL_USERNAME,
+            "Testing. bruh",
+            { parse_mode: "HTML" }
+          );
+          let counter = 0;
+          console.log("Message sent to channel:", sent_message);
+          // TODO: edit that message programmatically
+          setInterval(async () => {
+            await ctx.telegram.editMessageText(
+              ctx.CHANNEL_USERNAME,
+              sent_message.message_id,
+              undefined,
+              `The counter is: ${counter}\n\n<i>This message should be edited every 5 seconds.</i>`,
+              { parse_mode: "HTML" }
+            );
+
+            counter++;
+          }, 5000);
+          // TODO: forward that message form channel to the group
+          // TODO: decide structure of each message
+          // TODO: the bot should create that message with help of a god
+          // TODO: use IMDb to collect information about the bot
           return "Added brother.\n👌👌\n😊";
         }
         console.log("privilige:", who);

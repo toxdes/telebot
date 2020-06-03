@@ -1,9 +1,9 @@
 
 Now:
-  ■ Work on `!rate` milestones: 
-    ■ create a channel for dev, add dev bot to it, all for testing
-    ■ send a message to the channel
-    ■ edit that message programmatically
+  ■ Work on `!rate` milestones: @started(20-06-03 18:34)
+    ✔ create a channel for dev, add dev bot to it, all for testing @done(20-06-03 18:34)
+    ✔ send a message to the channel @done(20-06-03 19:27)
+    ✔ edit that message programmatically @done(20-06-03 19:54)
     ■ forward that message form channel to the group
     ■ decide structure of each message
     ■ the bot should create that message with help of a god

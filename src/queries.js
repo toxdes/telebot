@@ -11,7 +11,7 @@ exports.q = {
       
       CREATE TABLE IF NOT EXISTS movies(
           id INTEGER PRIMARY KEY,
-          subscriber_id INTEGER REFERENCES subscribers(id),
+          suggested_by_user_id INTEGER,
           rating NUMERIC NOT NULL DEFAULT 4.5
       );
       
@@ -19,7 +19,6 @@ exports.q = {
       CREATE TABLE IF NOT EXISTS rating(
         id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
-        username VARCHAR(240) NOT NULL,
         movie_id INTEGER NOT NULL REFERENCES movies(id),
         rating NUMERIC NOT NULL DEFAULT 4.5,
         CONSTRAINT unique_user_movie UNIQUE (user_id, movie_id)
