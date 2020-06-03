@@ -1,9 +1,24 @@
 
 Now:
-  
+  ■ Work on `!rate` milestones: 
+    ■ create a channel for dev, add dev bot to it, all for testing
+    ■ send a message to the channel
+    ■ edit that message programmatically
+    ■ forward that message form channel to the group
+    ■ decide structure of each message
+    ■ the bot should create that message with help of a god
+    ■ use IMDb to collect information about the bot
 
 Future:
-  ■ Work on `!rate`
+  ■ Work on `!rate` 
+    ■ create a channel for dev, add dev bot to it
+    ■ send a message to the channel
+    ■ edit that message programmatically
+    ■ forward that message form channel to the group
+    ■ decide structure of each message
+    ■ the bot should create that message with help of a god
+    ■ use IMDb to collect information about the bot
+
     ■ add `!trust` command
       1. create a new field for subscribers table, named `is_trusted` and `trusted_by`.
       2. command will have god privilige and will be a reply to a message, if already trusted it toggles  it.
