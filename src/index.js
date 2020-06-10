@@ -16,8 +16,8 @@ const { q } = require("./queries");
 // create a postgres db client
 const client = new Client({
   connectionString: is_prod()
-    ? process.env.DEV_DATABASE_URL
-    : process.env.DATABASE_URL,
+    ? process.env.DATABASE_URL
+    : process.env.DEV_DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
