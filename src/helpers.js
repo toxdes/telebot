@@ -253,6 +253,13 @@ const handle_command = (client, cmd, ctx) => {
             counter++;
           }, 5000);
           // TODO: forward that message form channel to the group
+          // FIXME: forwarded message should be consistent with the original message, currently, forwarded message doesn't update if the original messaage is updated
+          await ctx.telegram.forwardMessage(
+            ctx.chat.id,
+            ctx.CHANNEL_USERNAME,
+            sent_message.message_id
+          );
+          // TODO: Need to have a stateful coversation with a god
           // TODO: decide structure of each message
           // TODO: the bot should create that message with help of a god
           // TODO: use IMDb to collect information about the bot
