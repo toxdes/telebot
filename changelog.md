@@ -3,6 +3,7 @@
 Changelog for the development
 
 ### v 0.3.4
+- Added a `config.sh` file, which just has some variables. Also changed README a bit, added installation instructions to it. 
 - For `!delete`, changed interval from 1 day to 5 minutes
 - Also, need to store timestamp instead of date in `delete_queue` table, so fixed that.
 - I think this is it.

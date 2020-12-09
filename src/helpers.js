@@ -138,7 +138,7 @@ const handle_command = (client, cmd, ctx) => {
   switch (c) {
     case "help":
       return async () => {
-        let res = `Yo.😡\nHumanity was a mistake.\n\nI don't <b>want</b> to help you, but then you won't shut up...So, I guess I'll have to force myself into helping you.`;
+        let res = `Yo.😡\nCivilization was a mistake.\n\nI don't <b>want</b> to help you, but then you won't shut up...So, I guess I'll have to force myself into helping you.`;
         res = `${res}\n\nAnyways, these are the core commands I currently support.\n\n`;
         Object.keys(commands).map(each => {
           res = `${res}<code>!${each}</code> => ${commands[each].desc}`;
